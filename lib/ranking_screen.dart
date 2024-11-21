@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class RankingScreen extends StatelessWidget {
+  const RankingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ranking"),
+        title: const Text("Ranking"),
         backgroundColor: const Color(0xFF67AB67),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
-        children: [
+        padding: const EdgeInsets.all(16),
+        children: const [
           RankingCard(
             turma: "7º Ano A",
             papel: "5 kg",
@@ -36,7 +38,7 @@ class RankingScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 2, // Índice da aba atual
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.recycling),
             label: "Reciclagem",
@@ -68,7 +70,7 @@ class RankingCard extends StatelessWidget {
   final String total;
   final List<double> progressValues;
 
-  const RankingCard({
+  const RankingCard({super.key, 
     required this.turma,
     required this.papel,
     required this.vidro,
@@ -82,26 +84,26 @@ class RankingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: Colors.green[50],
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Turma - $turma",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             LinearProgressIndicator(
               value: progressValues.reduce((a, b) => a + b),
               minHeight: 10,
               backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation(Colors.green),
+              valueColor: const AlwaysStoppedAnimation(Colors.green),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Wrap(
               spacing: 16,
               runSpacing: 8,
@@ -126,7 +128,7 @@ class InfoTile extends StatelessWidget {
   final String label;
   final String value;
 
-  const InfoTile({
+  const InfoTile({super.key, 
     required this.color,
     required this.label,
     required this.value,
@@ -138,7 +140,7 @@ class InfoTile extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CircleAvatar(radius: 5, backgroundColor: color),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text("$label: $value"),
       ],
     );

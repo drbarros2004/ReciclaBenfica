@@ -80,18 +80,50 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'ranking_screen.dart';
+// import 'password_screen.dart';
+// import 'home_screen.dart';
+// import 'recycling_screen.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Reciclagem App',
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//       ),
+//       home: const HomeScreen(),
+//       routes: {
+//         '/ranking': (context) => RankingScreen(),
+//         '/password': (context) => const PasswordScreen(),
+//         '/recycling': (context) => const RecyclingScreen(),
+//       },
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'ranking_screen.dart';
 import 'password_screen.dart';
 import 'home_screen.dart';
 import 'recycling_screen.dart';
+import 'profile_selection_screen.dart'; // Importa a nova tela
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -100,12 +132,14 @@ class MyApp extends StatelessWidget {
       title: 'Reciclagem App',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        fontFamily: 'InstrumentSans'
       ),
-      home: const HomeScreen(),
+      home: const ProfileSelectionScreen(), // Definindo a tela de escolha de perfil como a tela inicial
       routes: {
-        '/ranking': (context) => RankingScreen(),
+        '/ranking': (context) => const RankingScreen(),
         '/password': (context) => const PasswordScreen(),
         '/recycling': (context) => const RecyclingScreen(),
+        '/home': (context) => const HomeScreen(), // Rota para HomeScreen após login
       },
     );
   }
