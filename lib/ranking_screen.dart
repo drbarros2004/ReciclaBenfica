@@ -9,6 +9,13 @@ class RankingScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ranking"),
         backgroundColor: const Color(0xFF67AB67),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // Ícone de seta de voltar.
+          onPressed: () {
+            // Navegar para a tela de seleção de perfil.
+            Navigator.pushNamed(context, '/profile_selection_screen');
+          }
+        )
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -33,10 +40,24 @@ class RankingScreen extends StatelessWidget {
             total: "10 kg",
             progressValues: [0.3, 0.1, 0.4, 0.2],
           ),
+          RankingCard(
+            turma: "8º Ano C",
+            papel: "6 kg",
+            vidro: "2 kg",
+            plastico: "4 kg",
+            pilha: "400 g",
+            metal: "2 kg",
+            total: "10 kg",
+            progressValues: [0.3, 0.1, 0.4, 0.2],
+          )
           // Adicione mais turmas aqui...
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF67AB67),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black54,
         currentIndex: 2, // Índice da aba atual
         items: const [
           BottomNavigationBarItem(
@@ -53,7 +74,17 @@ class RankingScreen extends StatelessWidget {
           ),
         ],
         onTap: (index) {
-          // Navegar entre abas
+          switch (index) {
+            case 0:
+              Navigator.pushNamed(context, '/recycling');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/home_screen');
+              break;
+            case 2:
+              // Caso de Início, já estamos na tela de Ranking
+              break;
+          }
         },
       ),
     );

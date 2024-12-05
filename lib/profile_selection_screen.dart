@@ -21,7 +21,7 @@ class ProfileSelectionScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildProfileButton(context, "Aluno", Icons.book, '/home'),
+              _buildProfileButton(context, "Aluno", Icons.book, '/home_screen'),
               const SizedBox(width: 20),
               _buildProfileButton(context, "Professor", Icons.person, '/password'),
             ],

@@ -36,7 +36,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              "Digite a senha para acessar:",
+              "Digite a senha para acessar (apenas para professores):",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -60,7 +60,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
               ),
-              child: const Text("Entrar"),
+              child: const Text(
+                "Entrar",
+                style: TextStyle(
+                  color: Colors.white
+                ),
+              ),
             ),
           ],
         ),
