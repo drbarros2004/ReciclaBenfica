@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils/navigation_utils.dart';
+import 'ranking_screen.dart';
+import 'recycling_screen.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -51,13 +55,15 @@ class HomeScreen extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.pushNamed(context, '/recycling');
+              // Navigator.pushNamed(context, '/recycling');
+              navigateWithSlideLR(context, const RecyclingScreen());
               break;
             case 1:
               // Caso de Início, já estamos na tela inicial
               break;
             case 2:
-              Navigator.pushNamed(context, '/ranking');
+              // Navigator.pushNamed(context, '/ranking');
+              navigateWithSlideRL(context, const RankingScreen());
               break;
           }
         },

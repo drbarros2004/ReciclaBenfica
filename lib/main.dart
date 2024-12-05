@@ -7,7 +7,20 @@ import 'home_screen.dart';
 import 'recycling_screen.dart';
 import 'profile_selection_screen.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

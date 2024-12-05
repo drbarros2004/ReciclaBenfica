@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils/navigation_utils.dart';
+import 'ranking_screen.dart';
+import 'home_screen.dart';
+
 
 class RecyclingScreen extends StatelessWidget {
   const RecyclingScreen({super.key});
@@ -91,10 +95,12 @@ class RecyclingScreen extends StatelessWidget {
               // Já estamos na tela de reciclagem
               break;
             case 1:
-              Navigator.pushNamed(context, '/home_screen');
+              // Navigator.pushNamed(context, '/home_screen');
+              navigateWithSlideRL(context, const HomeScreen());
               break;
             case 2:
-              Navigator.pushNamed(context, '/ranking');
+              // Navigator.pushNamed(context, '/ranking');
+              navigateWithSlideRL(context, const RankingScreen());
               break;
           }
         },
