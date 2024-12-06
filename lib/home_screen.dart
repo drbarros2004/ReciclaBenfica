@@ -11,7 +11,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Bem-vindo!"),
+        title: const Text('Bem-vindo!',
+        style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Colors.white),
+                ),
         backgroundColor: const Color(0xFF67AB67),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Ícone de seta de voltar.

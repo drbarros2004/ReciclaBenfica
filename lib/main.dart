@@ -6,6 +6,7 @@ import 'password_screen.dart';
 import 'home_screen.dart';
 import 'recycling_screen.dart';
 import 'profile_selection_screen.dart';
+import 'edit_data_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -43,6 +44,8 @@ class MyApp extends StatelessWidget {
         '/recycling': (context) => const RecyclingScreen(),
         '/home_screen': (context) => const HomeScreen(), // Rota para HomeScreen após login
         '/profile_selection_screen': (context) => const ProfileSelectionScreen(),
+        '/edit_data_screen': (context) => const EditTurmasScreen(),
+
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';  // Importar o SharedPreferences
 
 class ProfileSelectionScreen extends StatelessWidget {
   const ProfileSelectionScreen({super.key});
@@ -7,8 +8,9 @@ class ProfileSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Escolha seu Perfil"),
+        title: const Text("Escolha seu perfil"),
         backgroundColor: const Color(0xFF67AB67),
+        automaticallyImplyLeading: false, // Tirando a seta de voltar!
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -21,9 +23,9 @@ class ProfileSelectionScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildProfileButton(context, "Aluno", Icons.book, '/home_screen'),
+              _buildProfileButton(context, "Aluno", Icons.book, '/home_screen', false),
               const SizedBox(width: 20),
-              _buildProfileButton(context, "Professor", Icons.person, '/password'),
+              _buildProfileButton(context, "Professor", Icons.person, '/password', true),
             ],
           ),
         ],
@@ -31,10 +33,13 @@ class ProfileSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileButton(BuildContext context, String label, IconData icon, String route) {
+  // Função para construir o botão do perfil e atualizar o SharedPreferences
+  Widget _buildProfileButton(BuildContext context, String label, IconData icon, String route, bool isProfessor) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(context, route); // Vai para a tela correta dependendo do perfil
+      onTap: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isProfessor', isProfessor);  // Salvar o valor de 'isProfessor' no SharedPreferences
+        Navigator.pushReplacementNamed(context, route);  // Vai para a tela correta dependendo do perfil
       },
       child: Card(
         elevation: 5,

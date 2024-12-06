@@ -19,7 +19,12 @@ class RecyclingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reciclagem'),
+        title: const Text('Reciclagem',
+        style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Colors.white),
+                ),
         backgroundColor: const Color(0xFF67AB67),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Ícone de seta de voltar.
