@@ -1,1 +1,45 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"reciclabenfica","appId":"1:906760061694:android:a74fde13db9b65dc60dbaf","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"reciclabenfica","appId":"1:906760061694:ios:5cf05a4470b9fe6760dbaf","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"reciclabenfica","appId":"1:906760061694:ios:5cf05a4470b9fe6760dbaf","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"reciclabenfica","configurations":{"web":"1:906760061694:web:2b8e65f8fa62a77a60dbaf"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "reciclabenfica",
+          "appId": "1:906760061694:android:a74fde13db9b65dc60dbaf",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "reciclabenfica",
+          "appId": "1:906760061694:ios:5cf05a4470b9fe6760dbaf",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "reciclabenfica",
+          "appId": "1:906760061694:ios:5cf05a4470b9fe6760dbaf",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "reciclabenfica",
+          "configurations": {
+            "web": "1:906760061694:web:2b8e65f8fa62a77a60dbaf"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

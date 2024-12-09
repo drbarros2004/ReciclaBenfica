@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_application_1/utils/navigation_utils.dart';
 import 'recycling_screen.dart';
 import 'home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -142,13 +141,33 @@ class RankingScreen extends StatelessWidget {
             ],
             onTap: (index) {
               switch (index) {
+                case 2:
+                  break;
                 case 0:
-                  navigateWithSlideLR(context, const RecyclingScreen());
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const RecyclingScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return child; // Sem animação
+                      },
+                      transitionDuration: Duration.zero, // Duração zero
+                      reverseTransitionDuration: Duration.zero, // Duração zero ao voltar
+                    ),
+                  );
                   break;
                 case 1:
-                  navigateWithSlideLR(context, const HomeScreen());
-                  break;
-                case 2:
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return child; // Sem animação
+                      },
+                      transitionDuration: Duration.zero, // Duração zero
+                      reverseTransitionDuration: Duration.zero, // Duração zero ao voltar
+                    ),
+                  );
                   break;
               }
             },
