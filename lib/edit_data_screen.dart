@@ -31,18 +31,105 @@ class EditTurmasScreen extends StatelessWidget {
 
           return ListView.builder(
             padding: const EdgeInsets.all(16),
-            itemCount: turmas.length,
+            itemCount: turmas.length + 1, // Adiciona um para o campo de alterar senha
             itemBuilder: (context, index) {
-              final doc = turmas[index];
-              final data = doc.data() as Map<String, dynamic>;
+              if (index < turmas.length) {
+                final doc = turmas[index];
+                final data = doc.data() as Map<String, dynamic>;
 
-              return EditTurmaCard(
-                turmaId: doc.id,
-                initialData: data,
-              );
+                return EditTurmaCard(
+                  turmaId: doc.id,
+                  initialData: data,
+                );
+              } else {
+                // Adiciona o formulário para alterar a senha
+                return const EditPasswordSection();
+              }
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class EditPasswordSection extends StatefulWidget {
+  const EditPasswordSection({super.key});
+
+  @override
+  _EditPasswordSectionState createState() => _EditPasswordSectionState();
+}
+
+class _EditPasswordSectionState extends State<EditPasswordSection> {
+  final TextEditingController _passwordController = TextEditingController();
+  String? _successMessage;
+  String? _errorMessage;
+
+  /// Atualiza a senha no Firebase
+  Future<void> _updatePassword() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('config')
+          .doc('password')
+          .set({'value': _passwordController.text});
+
+      setState(() {
+        _successMessage = "Senha atualizada com sucesso!";
+        _errorMessage = null;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = "Erro ao atualizar a senha.";
+        _successMessage = null;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.green[50],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Alterar Senha de Professor",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Nova Senha',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _updatePassword,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF67AB67),
+              ),
+              child: const Text('Salvar Nova Senha'),
+            ),
+            const SizedBox(height: 8),
+            if (_successMessage != null)
+              Text(
+                _successMessage!,
+                style: const TextStyle(color: Colors.green),
+              ),
+            if (_errorMessage != null)
+              Text(
+                _errorMessage!,
+                style: const TextStyle(color: Colors.red),
+              ),
+          ],
+        ),
       ),
     );
   }

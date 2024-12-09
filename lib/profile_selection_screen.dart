@@ -8,7 +8,12 @@ class ProfileSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Escolha seu perfil"),
+        title: const Text('Escolha seu perfil',
+        style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Colors.white),
+                ),
         backgroundColor: const Color(0xFF67AB67),
         automaticallyImplyLeading: false, // Tirando a seta de voltar!
       ),
