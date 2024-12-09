@@ -1,3 +1,165 @@
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'recycling_screen.dart';
+// import 'home_screen.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:flutter_application_1/utils/navigation_utils.dart';
+
+// class RankingScreen extends StatelessWidget {
+//   const RankingScreen({super.key});
+
+//   /// Recupera o valor de isProfessor armazenado no SharedPreferences
+//   Future<bool> getIsProfessor() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     return prefs.getBool('isProfessor') ?? false; // Retorna false se não configurado
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<bool>(
+//       future: getIsProfessor(),
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return const Center(child: CircularProgressIndicator());
+//         }
+
+//         final isProfessor = snapshot.data ?? false;
+
+//         return Scaffold(
+//           appBar: AppBar(
+//             title: const Text("Ranking", 
+//             style: TextStyle(
+//               fontWeight: FontWeight.bold,
+//               fontSize: 25,
+//               color: Colors.white),
+//                 ),
+//             backgroundColor: const Color(0xFF67AB67),
+//             leading: IconButton(
+//               icon: const Icon(Icons.arrow_back),
+//               onPressed: () {
+//                 Navigator.pushNamed(context, '/profile_selection_screen');
+//               },
+//             ),
+//             actions: isProfessor
+//                 ? [
+//                     IconButton(
+//                       icon: const Icon(Icons.edit),
+//                       onPressed: () {
+//                         Navigator.pushNamed(context, '/edit_data_screen');
+//                       },
+//                     ),
+//                   ]
+//                 : null,
+//           ),
+//           body: StreamBuilder<QuerySnapshot>(
+//             stream: FirebaseFirestore.instance.collection('turmas').snapshots(),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.waiting) {
+//                 return const Center(child: CircularProgressIndicator());
+//               }
+//               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//                 return const Center(child: Text('Nenhuma turma encontrada.'));
+//               }
+
+//               // Lógica para calcular os rankings (inalterada)
+//               final turmas = snapshot.data!.docs.map((doc) {
+//                 final data = doc.data() as Map<String, dynamic>;
+//                 return {
+//                   "turma": doc.id,
+//                   "papel": data['papel'] ?? 0.0,
+//                   "vidro": data['vidro'] ?? 0.0,
+//                   "plastico": data['plastico'] ?? 0.0,
+//                   "pilha": data['pilha'] ?? 0.0,
+//                   "metal": data['metal'] ?? 0.0,
+//                 };
+//               }).toList();
+
+//               const Map<String, double> pesos = {
+//                 "papel": 1.0,
+//                 "vidro": 5.0,
+//                 "plastico": 1.5,
+//                 "pilha": 50.0,
+//                 "metal": 5.0,
+//               };
+
+//               for (var turma in turmas) {
+//                 turma["total_quilos"] = turma["papel"] +
+//                     turma["vidro"] +
+//                     turma["plastico"] +
+//                     turma["pilha"] +
+//                     turma["metal"];
+//                 turma["pontuacao"] =
+//                     pesos["papel"]! * turma["papel"] +
+//                     pesos["vidro"]! * turma["vidro"] +
+//                     pesos["plastico"]! * turma["plastico"] +
+//                     pesos["pilha"]! * turma["pilha"] +
+//                     pesos["metal"]! * turma["metal"];
+//               }
+
+//               turmas.sort((a, b) => b["pontuacao"].compareTo(a["pontuacao"]));
+
+//               return ListView.builder(
+//                 padding: const EdgeInsets.all(16),
+//                 itemCount: turmas.length,
+//                 itemBuilder: (context, index) {
+//                   final turma = turmas[index];
+//                   return RankingCard(
+//                     position: index + 1,
+//                     turma: turma["turma"],
+//                     papel: "${turma["papel"]} kg",
+//                     vidro: "${turma["vidro"]} kg",
+//                     plastico: "${turma["plastico"]} kg",
+//                     pilha: "${turma["pilha"]} kg",
+//                     metal: "${turma["metal"]} kg",
+//                     totalQuilos: "${turma["total_quilos"]!.toStringAsFixed(2)} kg",
+//                     pontuacao: turma["pontuacao"]!.toStringAsFixed(2),
+//                     progresso: turma["progresso"] ?? [],
+//                   );
+//                 },
+//               );
+//             },
+//           ),
+//           bottomNavigationBar: BottomNavigationBar(
+//             type: BottomNavigationBarType.fixed,
+//             backgroundColor: const Color(0xFF67AB67),
+//             selectedItemColor: Colors.white,
+//             unselectedItemColor: Colors.black54,
+//             currentIndex: 2,
+//             items: const <BottomNavigationBarItem>[
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.recycling),
+//                 label: 'Reciclagem',
+//               ),
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.home),
+//                 label: 'Início',
+//               ),
+//               BottomNavigationBarItem(
+//                 icon: Icon(Icons.emoji_events),
+//                 label: 'Ranking',
+//               ),
+//             ],
+//             onTap: (index) {
+//               switch (index) {
+//                 case 0:
+//                   navigateWithFade(context, RecyclingScreen());
+//                   break;
+//                 case 1:
+//                   navigateWithFade(context, HomeScreen());
+//                   break;
+//                 case 2:
+//                   break;
+//               }
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'recycling_screen.dart';
@@ -27,12 +189,11 @@ class RankingScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Ranking", 
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-              color: Colors.white),
-                ),
+            title: const Text(
+              "Ranking",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+            ),
             backgroundColor: const Color(0xFF67AB67),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -61,7 +222,7 @@ class RankingScreen extends StatelessWidget {
                 return const Center(child: Text('Nenhuma turma encontrada.'));
               }
 
-              // Lógica para calcular os rankings (inalterada)
+              // Lógica para calcular os rankings
               final turmas = snapshot.data!.docs.map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 return {
@@ -83,17 +244,28 @@ class RankingScreen extends StatelessWidget {
               };
 
               for (var turma in turmas) {
+                final totalPontuacao = pesos["papel"]! * turma["papel"] +
+                    pesos["vidro"]! * turma["vidro"] +
+                    pesos["plastico"]! * turma["plastico"] +
+                    pesos["pilha"]! * turma["pilha"] +
+                    pesos["metal"]! * turma["metal"];
+
                 turma["total_quilos"] = turma["papel"] +
                     turma["vidro"] +
                     turma["plastico"] +
                     turma["pilha"] +
                     turma["metal"];
-                turma["pontuacao"] =
-                    pesos["papel"]! * turma["papel"] +
-                    pesos["vidro"]! * turma["vidro"] +
-                    pesos["plastico"]! * turma["plastico"] +
-                    pesos["pilha"]! * turma["pilha"] +
-                    pesos["metal"]! * turma["metal"];
+
+                turma["pontuacao"] = totalPontuacao;
+
+                // Calculando o progresso para a barra
+                turma["progresso"] = [
+                  pesos["papel"]! * turma["papel"] / totalPontuacao,
+                  pesos["vidro"]! * turma["vidro"] / totalPontuacao,
+                  pesos["plastico"]! * turma["plastico"] / totalPontuacao,
+                  pesos["pilha"]! * turma["pilha"] / totalPontuacao,
+                  pesos["metal"]! * turma["metal"] / totalPontuacao,
+                ];
               }
 
               turmas.sort((a, b) => b["pontuacao"].compareTo(a["pontuacao"]));
@@ -113,7 +285,7 @@ class RankingScreen extends StatelessWidget {
                     metal: "${turma["metal"]} kg",
                     totalQuilos: "${turma["total_quilos"]!.toStringAsFixed(2)} kg",
                     pontuacao: turma["pontuacao"]!.toStringAsFixed(2),
-                    progresso: turma["progresso"] ?? [],
+                    progresso: turma["progresso"],
                   );
                 },
               );
@@ -322,4 +494,3 @@ class InfoTile extends StatelessWidget {
     );
   }
 }
-
