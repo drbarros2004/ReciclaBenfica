@@ -64,7 +64,7 @@ class RankingScreen extends StatelessWidget {
               final turmas = snapshot.data!.docs.map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 return {
-                  "turma": doc.id,
+                  "turma": data['nome'] ?? "Turma sem nome",
                   "papel": data['papel'] ?? 0.0,
                   "vidro": data['vidro'] ?? 0.0,
                   "plastico": data['plastico'] ?? 0.0,
