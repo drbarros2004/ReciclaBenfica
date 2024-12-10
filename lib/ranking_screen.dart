@@ -261,52 +261,109 @@ class _RankingCardState extends State<RankingCard> with SingleTickerProviderStat
                     ),
                     const SizedBox(height: 8),
 
-                    // Barra de progresso contínua
                     SizedBox(
                       height: 15,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent, // Fundo transparente para o contorno
+                          border: Border.all(
+                            color: const Color(0xFF2E672E), // Cor do contorno
+                            width: 2.5, // Largura do contorno
+                          ),
+                          borderRadius: BorderRadius.circular(20), // Arredondamento do contorno
+                        ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
-                          ),
-                          Row(
-                            children: widget.progresso.asMap().entries.map((entry) {
-                              final index = entry.key;
-                              final value = entry.value;
-                              final colors = [
-                                Colors.blue,
-                                Colors.green,
-                                Colors.red,
-                                Colors.orange,
-                                Colors.yellow,
-                              ];
-                              return Expanded(
-                                flex: (value * 100).toInt(),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: colors[index],
-                                    borderRadius: index == 0
-                                        ? const BorderRadius.only(
-                                            topLeft: Radius.circular(5),
-                                            bottomLeft: Radius.circular(5),
-                                          )
-                                        : index == widget.progresso.length - 1
-                                            ? const BorderRadius.only(
-                                                topRight: Radius.circular(5),
-                                                bottomRight: Radius.circular(5),
-                                              )
-                                            : null,
+                            Row(
+                              children: widget.progresso.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final value = entry.value;
+                                final colors = [
+                                  const Color(0xFF60BDEB),
+                                  const Color(0xFF88FB65),
+                                  const Color(0xFFEE6060),
+                                  const Color(0xFFFAAB3C),
+                                  const Color(0xFFFAEB3C)
+                                ];
+                                return Expanded(
+                                  flex: (value * 100).toInt(),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: colors[index],
+                                      borderRadius: index == 0
+                                          ? const BorderRadius.only(
+                                              topLeft: Radius.circular(5),
+                                              bottomLeft: Radius.circular(5),
+                                            )
+                                          : index == widget.progresso.length - 1
+                                              ? const BorderRadius.only(
+                                                  topRight: Radius.circular(5),
+                                                  bottomRight: Radius.circular(5),
+                                                )
+                                              : null,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+
+
+                    // Barra de progresso contínua
+                    // SizedBox(
+                    //   height: 15,
+                    //   child: Stack(
+                    //     children: [
+                    //       Container(
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.grey[300],
+                    //           borderRadius: BorderRadius.circular(20),
+                    //         ),
+                    //       ),
+                    //       Row(
+                    //         children: widget.progresso.asMap().entries.map((entry) {
+                    //           final index = entry.key;
+                    //           final value = entry.value;
+                    //           final colors = [
+                    //             const Color(0xFF60BDEB),
+                    //             const Color(0xFF88FB65),
+                    //             const Color(0xFFEE6060),
+                    //             const Color(0xFFFAAB3C),
+                    //             const Color(0xFFFAEB3C)
+                    //           ];
+                    //           return Expanded(
+                    //             flex: (value * 100).toInt(),
+                    //             child: Container(
+                    //               decoration: BoxDecoration(
+                    //                 color: colors[index],
+                    //                 borderRadius: index == 0
+                    //                     ? const BorderRadius.only(
+                    //                         topLeft: Radius.circular(5),
+                    //                         bottomLeft: Radius.circular(5),
+                    //                       )
+                    //                     : index == widget.progresso.length - 1
+                    //                         ? const BorderRadius.only(
+                    //                             topRight: Radius.circular(5),
+                    //                             bottomRight: Radius.circular(5),
+                    //                           )
+                    //                         : null,
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }).toList(),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     const SizedBox(height: 16),
 
                     // Detalhes da turma (expandível)
@@ -315,12 +372,12 @@ class _RankingCardState extends State<RankingCard> with SingleTickerProviderStat
                         spacing: 16,
                         runSpacing: 8,
                         children: [
-                          InfoTile(color: Colors.blue, label: "Papel", value: widget.papel),
-                          InfoTile(color: Colors.green, label: "Vidro", value: widget.vidro),
-                          InfoTile(color: Colors.red, label: "Plástico", value: widget.plastico),
-                          InfoTile(color: Colors.orange, label: "Pilha", value: widget.pilha),
-                          InfoTile(color: Colors.yellow, label: "Metal", value: widget.metal),
-                          InfoTile(color: Colors.purple, label: "Total (kg)", value: widget.totalQuilos),
+                          InfoTile(color: const Color(0xFF60BDEB), label: "Papel", value: widget.papel),
+                          InfoTile(color: const Color.fromARGB(255, 106, 203, 77), label: "Vidro", value: widget.vidro),
+                          InfoTile(color: const Color(0xFFEE6060), label: "Plástico", value: widget.plastico),
+                          InfoTile(color: const Color(0xFFFAAB3C), label: "Pilha", value: widget.pilha),
+                          InfoTile(color: const Color(0xFFFAEB3C), label: "Metal", value: widget.metal),
+                          InfoTile(color: const Color.fromARGB(255, 158, 72, 173), label: "Total (kg)", value: widget.totalQuilos),
                         ],
                       ),
 
