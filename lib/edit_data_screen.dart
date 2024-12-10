@@ -44,17 +44,17 @@ class _EditTurmasScreenState extends State<EditTurmasScreen> {
 
           return ListView.builder(
             padding: const EdgeInsets.all(16),
-            itemCount: turmas.length + 2, // Adiciona dois para mudar senha e criar turma
+            itemCount: turmas.length + 3, // Adiciona três: editar senha, editar pesos, criar turma
             itemBuilder: (context, index) {
               if (index < turmas.length) {
                 final doc = turmas[index];
                 final data = doc.data() as Map<String, dynamic>;
-                final nome = data['nome'] as String? ?? 'Sem Nome'; // Aqui pegamos o nome da turma
+                final nome = data['nome'] as String? ?? 'Sem Nome';
 
                 return EditTurmaCard(
                   turmaId: doc.id,
                   initialData: data,
-                  initialName: turmaNames[doc.id] ?? nome, // Usa o campo `nome`
+                  initialName: turmaNames[doc.id] ?? nome,
                   onNameChanged: (newName) {
                     setState(() {
                       turmaNames[doc.id] = newName;
@@ -63,6 +63,8 @@ class _EditTurmasScreenState extends State<EditTurmasScreen> {
                 );
               } else if (index == turmas.length) {
                 return const EditPasswordSection(); // Alterar senha
+              } else if (index == turmas.length + 1) {
+                return const EditWeightsSection(); // Editar pesos
               } else {
                 return const CreateTurmaSection(); // Criar nova turma
               }
@@ -365,6 +367,118 @@ class _EditPasswordSectionState extends State<EditPasswordSection> {
                 _errorMessage!,
                 style: const TextStyle(color: Colors.red),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EditWeightsSection extends StatefulWidget {
+  const EditWeightsSection({super.key});
+
+  @override
+  _EditWeightsSectionState createState() => _EditWeightsSectionState();
+}
+
+class _EditWeightsSectionState extends State<EditWeightsSection> {
+  final Map<String, TextEditingController> _weightControllers = {
+    'papel': TextEditingController(),
+    'vidro': TextEditingController(),
+    'plastico': TextEditingController(),
+    'pilha': TextEditingController(),
+    'metal': TextEditingController(),
+  };
+
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWeights();
+  }
+
+  Future<void> _loadWeights() async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('config')
+          .doc('pesos')
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data() as Map<String, dynamic>;
+        for (var key in _weightControllers.keys) {
+          _weightControllers[key]?.text = (data[key] ?? 0.0).toString();
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar os pesos: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _saveWeights() async {
+    try {
+      final Map<String, double> newWeights = {
+        for (var key in _weightControllers.keys)
+          key: double.tryParse(_weightControllers[key]!.text) ?? 0.0,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('config')
+          .doc('pesos')
+          .set(newWeights);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pesos atualizados com sucesso!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao salvar os pesos: $e')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.green[50],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Editar Pesos de Pontuação",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            ..._weightControllers.keys.map((key) {
+              return TextFormField(
+                controller: _weightControllers[key],
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Peso para $key'),
+              );
+            }),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _saveWeights,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF67AB67),
+              ),
+              child: const Text('Salvar Pesos'),
+            ),
           ],
         ),
       ),

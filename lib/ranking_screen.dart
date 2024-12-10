@@ -14,6 +14,29 @@ class RankingScreen extends StatelessWidget {
     return prefs.getBool('isProfessor') ?? false; // Retorna false se não configurado
   }
 
+  /// Recupera os pesos de pontuação do Firestore
+  Future<Map<String, double>> getPesos() async {
+    final doc = await FirebaseFirestore.instance.collection('config').doc('pesos').get();
+    if (doc.exists) {
+      final data = doc.data() as Map<String, dynamic>;
+      return {
+        "papel": (data['papel'] ?? 1.0).toDouble(),
+        "vidro": (data['vidro'] ?? 5.0).toDouble(),
+        "plastico": (data['plastico'] ?? 1.5).toDouble(),
+        "pilha": (data['pilha'] ?? 50.0).toDouble(),
+        "metal": (data['metal'] ?? 5.0).toDouble(),
+      };
+    }
+    // Retorna pesos padrão caso o documento não exista
+    return {
+      "papel": 1.0,
+      "vidro": 5.0,
+      "plastico": 1.5,
+      "pilha": 50.0,
+      "metal": 5.0,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -50,80 +73,88 @@ class RankingScreen extends StatelessWidget {
                   ]
                 : null,
           ),
-          body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('turmas').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+          body: FutureBuilder<Map<String, double>>(
+            future: getPesos(),
+            builder: (context, pesoSnapshot) {
+              if (pesoSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('Nenhuma turma encontrada.'));
+              if (!pesoSnapshot.hasData) {
+                return const Center(
+                  child: Text('Erro ao carregar os pesos.'),
+                );
               }
 
-              // Lógica para calcular os rankings
-              final turmas = snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>;
-                return {
-                  "turma": data['nome'] ?? "Turma sem nome",
-                  "papel": data['papel'] ?? 0.0,
-                  "vidro": data['vidro'] ?? 0.0,
-                  "plastico": data['plastico'] ?? 0.0,
-                  "pilha": data['pilha'] ?? 0.0,
-                  "metal": data['metal'] ?? 0.0,
-                };
-              }).toList();
+              final pesos = pesoSnapshot.data!;
 
-              const Map<String, double> pesos = {
-                "papel": 1.0,
-                "vidro": 5.0,
-                "plastico": 1.5,
-                "pilha": 50.0,
-                "metal": 5.0,
-              };
+              return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('turmas').snapshots(),
+                builder: (context, turmaSnapshot) {
+                  if (turmaSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (!turmaSnapshot.hasData || turmaSnapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('Nenhuma turma encontrada.'));
+                  }
 
-              for (var turma in turmas) {
-                final totalPontuacao = pesos["papel"]! * turma["papel"] +
-                    pesos["vidro"]! * turma["vidro"] +
-                    pesos["plastico"]! * turma["plastico"] +
-                    pesos["pilha"]! * turma["pilha"] +
-                    pesos["metal"]! * turma["metal"];
+                  // Lógica para calcular os rankings
+                  final turmas = turmaSnapshot.data!.docs.map((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    return {
+                      "turma": data['nome'] ?? "Turma sem nome",
+                      "papel": data['papel'] ?? 0.0,
+                      "vidro": data['vidro'] ?? 0.0,
+                      "plastico": data['plastico'] ?? 0.0,
+                      "pilha": data['pilha'] ?? 0.0,
+                      "metal": data['metal'] ?? 0.0,
+                    };
+                  }).toList();
 
-                turma["total_quilos"] = turma["papel"] +
-                    turma["vidro"] +
-                    turma["plastico"] +
-                    turma["pilha"] +
-                    turma["metal"];
+                  for (var turma in turmas) {
+                    final totalPontuacao = pesos["papel"]! * turma["papel"] +
+                        pesos["vidro"]! * turma["vidro"] +
+                        pesos["plastico"]! * turma["plastico"] +
+                        pesos["pilha"]! * turma["pilha"] +
+                        pesos["metal"]! * turma["metal"];
 
-                turma["pontuacao"] = totalPontuacao;
+                    turma["total_quilos"] = turma["papel"] +
+                        turma["vidro"] +
+                        turma["plastico"] +
+                        turma["pilha"] +
+                        turma["metal"];
 
-                // Calculando o progresso para a barra
-                turma["progresso"] = [
-                  pesos["papel"]! * turma["papel"] / totalPontuacao,
-                  pesos["vidro"]! * turma["vidro"] / totalPontuacao,
-                  pesos["plastico"]! * turma["plastico"] / totalPontuacao,
-                  pesos["pilha"]! * turma["pilha"] / totalPontuacao,
-                  pesos["metal"]! * turma["metal"] / totalPontuacao,
-                ];
-              }
+                    turma["pontuacao"] = totalPontuacao;
 
-              turmas.sort((a, b) => b["pontuacao"].compareTo(a["pontuacao"]));
+                    // Calculando o progresso para a barra
+                    turma["progresso"] = [
+                      pesos["papel"]! * turma["papel"] / totalPontuacao,
+                      pesos["vidro"]! * turma["vidro"] / totalPontuacao,
+                      pesos["plastico"]! * turma["plastico"] / totalPontuacao,
+                      pesos["pilha"]! * turma["pilha"] / totalPontuacao,
+                      pesos["metal"]! * turma["metal"] / totalPontuacao,
+                    ];
+                  }
 
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: turmas.length,
-                itemBuilder: (context, index) {
-                  final turma = turmas[index];
-                  return RankingCard(
-                    position: index + 1,
-                    turma: turma["turma"],
-                    papel: "${turma["papel"]} kg",
-                    vidro: "${turma["vidro"]} kg",
-                    plastico: "${turma["plastico"]} kg",
-                    pilha: "${turma["pilha"]} kg",
-                    metal: "${turma["metal"]} kg",
-                    totalQuilos: "${turma["total_quilos"]!.toStringAsFixed(2)} kg",
-                    pontuacao: turma["pontuacao"]!.toStringAsFixed(2),
-                    progresso: turma["progresso"],
+                  turmas.sort((a, b) => b["pontuacao"].compareTo(a["pontuacao"]));
+
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: turmas.length,
+                    itemBuilder: (context, index) {
+                      final turma = turmas[index];
+                      return RankingCard(
+                        position: index + 1,
+                        turma: turma["turma"],
+                        papel: "${turma["papel"]} kg",
+                        vidro: "${turma["vidro"]} kg",
+                        plastico: "${turma["plastico"]} kg",
+                        pilha: "${turma["pilha"]} kg",
+                        metal: "${turma["metal"]} kg",
+                        totalQuilos: "${turma["total_quilos"]!.toStringAsFixed(2)} kg",
+                        pontuacao: turma["pontuacao"]!.toStringAsFixed(2),
+                        progresso: turma["progresso"],
+                      );
+                    },
                   );
                 },
               );
