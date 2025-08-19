@@ -1,20 +1,3 @@
-# flutter_application_1
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
 # ReciclaBenfica ♻️
 Um aplicativo web desenvolvido para gamificar a coleta seletiva na Escola Municipal Ginásio Educacional Tecnológico (GET) Cardeal Leme, incentivando os alunos a aprenderem sobre reciclagem de forma interativa e divertida.
 
@@ -84,8 +67,3 @@ Este projeto foi desenvolvido por:
 - Gabriel Schmitz
 
 - Pedro Cintra
-
-
-
-🤝 Agradecimentos
-Agradecemos aos colegas dos trios 1 e 3 da disciplina, que forneceram orientações valiosas sobre Flutter no início do desenvolvimento
