@@ -12,23 +12,12 @@ O ReciclaBenfica é uma aplicação que transforma a reciclagem em uma competiç
 O projeto foi desenvolvido como trabalho prático para a disciplina de Computadores e Sociedade, com o objetivo de criar uma ferramenta digital simples, intuitiva e com um viés educativo para engajar os alunos na causa ambiental.
 
 
-
-## 💡 Motivação
-Inicialmente, a ideia era criar uma plataforma para conectar catadores de lixo com moradores e comerciantes da região de Benfica, no Rio de Janeiro. No entanto, após uma análise de viabilidade, percebemos que a proposta original enfrentaria barreiras significativas, como a falta de acesso à tecnologia por parte dos catadores e a existência de aplicativos já consolidados com uma proposta similar.
-
-
-
-Por isso, o projeto foi redirecionado para focar em um dos objetivos secundários: a criação de uma moeda social para a escola parceira. A nova abordagem permitiu desenvolver uma solução mais direcionada e com maior potencial de impacto dentro da comunidade escolar.
-
 ## ✨ Funcionalidades
 
 - Ranking de Turmas: Visualização da pontuação e da colocação de cada turma em tempo real, com uma barra de progresso que detalha a composição dos materiais reciclados.
 
 
-
-
 - Seção Educativa: Uma área interativa onde os alunos podem aprender sobre a forma correta de reciclar diferentes tipos de materiais, como papel, plástico, metal, vidro e pilhas.
-
 
 
 - Autenticação de Perfis: O sistema diferencia o acesso de Alunos e Professores.
